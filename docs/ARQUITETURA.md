@@ -25,9 +25,10 @@ flowchart LR
         end
 
         subgraph BRONZE["Bronze"]
+            direction TB
             A["bronze_job.py<br/>Auto Loader — availableNow"]
-            B[("Tabelas Delta Bronze<br/>append-only")]
             CP[("Volumes de schema<br/>e checkpoint")]
+            B[("Tabelas Delta Bronze<br/>append-only")]
         end
 
         subgraph SILVER["Silver"]
@@ -36,8 +37,7 @@ flowchart LR
         end
 
         subgraph CONTROLE["Controle"]
-            CL[("control_landing_log")]
-            CW[("control_watermark")]
+            CI[("control_ingestion_log")]
             CQ[("control_quality_log")]
         end
     end
@@ -45,11 +45,10 @@ flowchart LR
     S --> I
     M -->|"extração<br/>full ou incremental"| I
     I -->|"lotes JSONL"| L
-    I --> CL
-    I --> CW
     L --> A
-    CP <--> A
+    A <--> CP
     A --> B
+    A --> CI
     B --> V
     V -->|"registros válidos"| T
     V --> CQ
@@ -116,8 +115,6 @@ O fluxo deve ser executado na ordem `ingestion_job.py` → `bronze_job.py` → `
 
 ### Control
 
-- `<catalog>.bronze.control_landing_log`: uma linha por tentativa de extração e coleção, com quantidade, duração, watermark, status e erro.
-- `<catalog>.bronze.control_watermark`: último watermark confirmado de cada coleção incremental.
 - `<catalog>.silver.control_quality_log`: métricas e status do processamento Silver.
 - `<catalog>.bronze.control_ingestion_log`: objeto criado pelo job Bronze, mas ainda não alimentado pela implementação atual.
 
