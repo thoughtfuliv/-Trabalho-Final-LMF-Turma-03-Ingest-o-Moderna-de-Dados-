@@ -1,0 +1,22 @@
+pipeline:
+  catalog: "meu_catalog"
+  landing_schema: "landing"
+  checkpoints_schema: "checkpoints"
+  schemas_schema: "schemas"
+  bronze_schema: "bronze"
+  silver_schema: "silver"
+
+  volume_name: "mflix"
+
+  landing_base_path: "/Volumes/meu_catalog/landing/mflix"
+  checkpoint_base_path: "/Volumes/meu_catalog/checkpoints/mflix"
+  schema_base_path: "/Volumes/meu_catalog/schemas/mflix"
+
+  batch_size: 5000
+  max_retries: 3
+
+  infer_column_types: true
+
+  schema_evolution_mode: "rescue"
+
+  available_now: true
